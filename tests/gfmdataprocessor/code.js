@@ -3,12 +3,12 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-import { testDataProcessor as test } from '../../tests/_utils/utils';
+import { testDataProcessor } from '../_utils/utils';
 
 describe( 'GFMDataProcessor', () => {
 	describe( 'code', () => {
 		it( 'should process inline code', () => {
-			test(
+			testDataProcessor(
 				'regular text and `inline code`',
 
 				'<p>regular text and <code>inline code</code></p>'
@@ -16,7 +16,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should properly process multiple code', () => {
-			test(
+			testDataProcessor(
 				'`this is code` and this is `too`',
 
 				'<p><code>this is code</code> and this is <code>too</code></p>'
@@ -24,7 +24,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process spaces inside inline code', () => {
-			test(
+			testDataProcessor(
 				'regular text and` inline code`',
 
 				'<p>regular text and<code>inline code</code></p>',
@@ -36,7 +36,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should properly process backticks inside code spans #1', () => {
-			test(
+			testDataProcessor(
 				'`` `backticks` ``',
 
 				'<p><code>`backticks`</code></p>'
@@ -44,15 +44,15 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should properly process backticks inside code spans #2', () => {
-			test(
-				'`` some `backticks` inside ``',
+			testDataProcessor(
+				'``some `backticks` inside``',
 
 				'<p><code>some `backticks` inside</code></p>'
 			);
 		} );
 
 		it( 'should process code blocks indented with tabs', () => {
-			test(
+			testDataProcessor(
 				'	code block',
 
 				// GitHub is rendering as:
@@ -68,7 +68,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process code blocks indented with spaces', () => {
-			test(
+			testDataProcessor(
 				'    code block',
 
 				// GitHub is rendering as:
@@ -86,7 +86,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process multi line code blocks indented with tabs', () => {
-			test(
+			testDataProcessor(
 				'	first line\n' +
 				'	second line',
 
@@ -108,7 +108,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process multi line code blocks indented with spaces', () => {
-			test(
+			testDataProcessor(
 				'    first line\n' +
 				'    second line',
 
@@ -130,7 +130,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process multi line code blocks with trailing spaces', () => {
-			test(
+			testDataProcessor(
 				'	the lines in this block  \n' +
 				'	all contain trailing spaces  ',
 
@@ -142,17 +142,17 @@ describe( 'GFMDataProcessor', () => {
 				'<pre><code>the lines in this block  \n' +
 				'all contain trailing spaces  </code></pre>',
 
-				// When converting back tabs are normalized to ```.
+				// When converting back tabs are normalized to ```, while the test function remove trailing spaces.
 				'```\n' +
-				'the lines in this block  \n' +
-				'all contain trailing spaces  \n' +
+				'the lines in this block\n' +
+				'all contain trailing spaces\n' +
 				'```'
 			);
 		} );
 
 		it( 'should process code block with language name', () => {
-			test(
-				'``` js\n' +
+			testDataProcessor(
+				'```js\n' +
 				'var a = \'hello\';\n' +
 				'console.log(a + \' world\');\n' +
 				'```',
@@ -160,13 +160,13 @@ describe( 'GFMDataProcessor', () => {
 				// GitHub is rendering as special html with syntax highlighting.
 				// We will need to handle this separately by some feature.
 
-				'<pre><code class="lang-js">var a = \'hello\';\n' +
+				'<pre><code class="language-js">var a = \'hello\';\n' +
 				'console.log(a + \' world\');</code></pre>'
 			);
 		} );
 
 		it( 'should process code block with language name and using ~~~ as delimiter', () => {
-			test(
+			testDataProcessor(
 				'~~~ bash\n' +
 				'#!/bin/bash\n' +
 				'~~~',
@@ -174,19 +174,19 @@ describe( 'GFMDataProcessor', () => {
 				// GitHub is rendering as special html with syntax highlighting.
 				// We will need to handle this separately by some feature.
 
-				'<pre><code class="lang-bash">#!/bin/bash</code></pre>',
+				'<pre><code class="language-bash">#!/bin/bash</code></pre>',
 
 				// When converting back ~~~ are normalized to ```.
 
-				'``` bash\n' +
+				'```bash\n' +
 				'#!/bin/bash\n' +
 				'```'
 			);
 		} );
 
 		it( 'should process code block with language name and using ``````` as delimiter', () => {
-			test(
-				'``````` js\n' +
+			testDataProcessor(
+				'```````js\n' +
 				'var a = \'hello\';\n' +
 				'console.log(a + \' world\');\n' +
 				'```````',
@@ -194,12 +194,12 @@ describe( 'GFMDataProcessor', () => {
 				// GitHub is rendering as special html with syntax highlighting.
 				// We will need to handle this separately by some feature.
 
-				'<pre><code class="lang-js">var a = \'hello\';\n' +
+				'<pre><code class="language-js">var a = \'hello\';\n' +
 				'console.log(a + \' world\');</code></pre>',
 
 				// When converting back ``````` are normalized to ```.
 
-				'``` js\n' +
+				'```js\n' +
 				'var a = \'hello\';\n' +
 				'console.log(a + \' world\');\n' +
 				'```'
@@ -207,7 +207,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process code block with language name and using ~~~~~~~~~~ as delimiter', () => {
-			test(
+			testDataProcessor(
 				'~~~~~~~~~~ js\n' +
 				'var a = \'hello\';\n' +
 				'console.log(a + \' world\');\n' +
@@ -216,12 +216,12 @@ describe( 'GFMDataProcessor', () => {
 				// GitHub is rendering as special html with syntax highlighting.
 				// We will need to handle this separately by some feature.
 
-				'<pre><code class="lang-js">var a = \'hello\';\n' +
+				'<pre><code class="language-js">var a = \'hello\';\n' +
 				'console.log(a + \' world\');</code></pre>',
 
 				// When converting back ~~~~~~~~~~ are normalized to ```.
 
-				'``` js\n' +
+				'```js\n' +
 				'var a = \'hello\';\n' +
 				'console.log(a + \' world\');\n' +
 				'```'
@@ -229,14 +229,14 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process empty code block', () => {
-			test(
-				'``` js\n' +
+			testDataProcessor(
+				'```js\n' +
 				'```',
 
 				// GitHub is rendering as special html with syntax highlighting.
 				// We will need to handle this separately by some feature.
 
-				'<pre><code class="lang-js"></code></pre>',
+				'<pre><code class="language-js"></code></pre>',
 
 				// When converting back, empty code blocks will be removed.
 				// This might be an issue when switching from source to editor
@@ -246,15 +246,15 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process code block with empty line', () => {
-			test(
-				'``` js\n' +
+			testDataProcessor(
+				'```js\n' +
 				'\n' +
 				'```',
 
 				// GitHub is rendering as special html with syntax highlighting.
 				// We will need to handle this separately by some feature.
 
-				'<pre><code class="lang-js"></code></pre>',
+				'<pre><code class="language-js"></code></pre>',
 
 				// When converting back, empty code blocks will be removed.
 				// This might be an issue when switching from source to editor
@@ -264,7 +264,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process nested code', () => {
-			test(
+			testDataProcessor(
 				'````` code `` code ``` `````',
 
 				// GitHub is rendering as:
@@ -273,7 +273,43 @@ describe( 'GFMDataProcessor', () => {
 				'<p><code>code `` code ```</code></p>',
 
 				// When converting back ````` will be normalized to ``.
-				'`` code `` code ``` ``'
+				'`code `` code ``` `'
+			);
+		} );
+
+		it( 'should handle triple ticks inside code', () => {
+			testDataProcessor(
+				'````\n' +
+				'```\n' +
+				'Code\n' +
+				'```\n' +
+				'````',
+
+				'<pre><code>' +
+				'```\n' +
+				'Code\n' +
+				'```' +
+				'</code></pre>'
+			);
+		} );
+
+		it( 'should handle triple and quatruple ticks inside code', () => {
+			testDataProcessor(
+				'`````\n' +
+				'````\n' +
+				'```\n' +
+				'Code\n' +
+				'```\n' +
+				'````\n' +
+				'`````',
+
+				'<pre><code>' +
+				'````\n' +
+				'```\n' +
+				'Code\n' +
+				'```\n' +
+				'````' +
+				'</code></pre>'
 			);
 		} );
 	} );

@@ -3,21 +3,21 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-import { testDataProcessor as test } from '../../tests/_utils/utils';
+import { testDataProcessor } from '../_utils/utils';
 
 describe( 'GFMDataProcessor', () => {
 	describe( 'Strikethrough', () => {
 		it( 'should process strikethrough text', () => {
-			test(
-				'~~deleted~~',
+			testDataProcessor(
+				'~deleted~',
 
 				'<p><del>deleted</del></p>'
 			);
 		} );
 
 		it( 'should process strikethrough inside text', () => {
-			test(
-				'This is ~~deleted content~~.',
+			testDataProcessor(
+				'This is ~deleted content~.',
 
 				'<p>This is <del>deleted content</del>.</p>'
 			);

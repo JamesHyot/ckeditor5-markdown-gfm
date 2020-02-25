@@ -3,12 +3,12 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-import { testDataProcessor as test } from '../../tests/_utils/utils';
+import { testDataProcessor } from '../_utils/utils';
 
 describe( 'GFMDataProcessor', () => {
 	describe( 'paragraphs', () => {
 		it( 'single line', () => {
-			test(
+			testDataProcessor(
 				'single line paragraph',
 
 				'<p>single line paragraph</p>'
@@ -16,7 +16,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'multiline', () => {
-			test(
+			testDataProcessor(
 				'first\n' +
 				'second\n' +
 				'third',
@@ -30,7 +30,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'with header after #1', () => {
-			test(
+			testDataProcessor(
 				'single line\n' +
 				'# header',
 
@@ -40,25 +40,6 @@ describe( 'GFMDataProcessor', () => {
 				// <h1>header</h1>
 				'<p>single line</p><h1>header</h1>',
 
-				// To-markdown always put 2 empty lines after paragraph.
-				'single line\n\n' +
-				'# header'
-			);
-		} );
-
-		it( 'with header after #2', () => {
-			test(
-				'single line\n' +
-				'header\n' +
-				'===',
-
-				// GitHub is rendering as:
-				// <p>single line</p>
-				//
-				// <h1>header</h1>
-				'<p>single line</p><h1>header</h1>',
-
-				// To-markdown always put 2 empty lines after paragraph and normalize header to #.
 				'single line\n' +
 				'\n' +
 				'# header'
@@ -66,7 +47,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'with blockquote after', () => {
-			test(
+			testDataProcessor(
 				'single line' +
 				'\n> quote',
 
@@ -78,17 +59,16 @@ describe( 'GFMDataProcessor', () => {
 				// </blockquote>
 				'<p>single line</p><blockquote><p>quote</p></blockquote>',
 
-				// To-markdown always put 2 empty lines after paragraph.
-				'single line\n' +
+				'single line' +
 				'\n' +
-				'> quote'
+				'\n> quote'
 			);
 		} );
 
 		it( 'with list after', () => {
-			test(
+			testDataProcessor(
 				'single line\n' +
-				'* item',
+				'*   item',
 
 				// GitHub is rendering as:
 				// <p>single line</p>
@@ -98,28 +78,9 @@ describe( 'GFMDataProcessor', () => {
 				// </ul>
 				'<p>single line</p><ul><li>item</li></ul>',
 
-				// To-markdown always put 2 empty lines after paragraph.
 				'single line\n' +
 				'\n' +
 				'*   item'
-			);
-		} );
-
-		it( 'with div element after', () => {
-			test(
-				'single line\n' +
-				'<div>div element</div>',
-
-				// GitHub is rendering as:
-				// <p>single line</p>
-				//
-				// <div>div element</div>
-				'<p>single line</p><div>div element</div>',
-
-				// To-markdown always put 2 empty lines after paragraph.
-				'single line\n' +
-				'\n' +
-				'<div>div element</div>'
 			);
 		} );
 	} );

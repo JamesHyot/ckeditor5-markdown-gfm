@@ -3,12 +3,12 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-import { testDataProcessor as test } from '../../tests/_utils/utils';
+import { testDataProcessor } from '../_utils/utils';
 
 describe( 'GFMDataProcessor', () => {
 	describe( 'headers', () => {
 		it( 'should process level 1 header #1', () => {
-			test(
+			testDataProcessor(
 				'# Level 1',
 
 				'<h1>Level 1</h1>'
@@ -16,7 +16,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process level 1 header #2', () => {
-			test(
+			testDataProcessor(
 				'Level 1\n' +
 				'===',
 
@@ -28,7 +28,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process level 2 header #1', () => {
-			test(
+			testDataProcessor(
 				'## Level 2',
 
 				'<h2>Level 2</h2>'
@@ -36,7 +36,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process level 2 header #2', () => {
-			test(
+			testDataProcessor(
 				'Level 2\n' +
 				'---',
 
@@ -48,7 +48,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process level 3 header', () => {
-			test(
+			testDataProcessor(
 				'### Level 3',
 
 				'<h3>Level 3</h3>'
@@ -56,7 +56,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process level 4 header', () => {
-			test(
+			testDataProcessor(
 				'#### Level 4',
 
 				'<h4>Level 4</h4>'
@@ -64,7 +64,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process level 5 header', () => {
-			test(
+			testDataProcessor(
 				'##### Level 5',
 
 				'<h5>Level 5</h5>'
@@ -72,7 +72,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process level 6 header', () => {
-			test(
+			testDataProcessor(
 				'###### Level 6',
 
 				'<h6>Level 6</h6>'
@@ -80,7 +80,7 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should create header when more spaces before text', () => {
-			test(
+			testDataProcessor(
 				'#      Level 1',
 
 				'<h1>Level 1</h1>',
@@ -91,26 +91,36 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process headers placed next to each other #1', () => {
-			test(
+			testDataProcessor(
 				'# header\n' +
 				'# header',
 
-				'<h1>header</h1><h1>header</h1>'
+				'<h1>header</h1><h1>header</h1>',
+
+				'# header\n' +
+				'\n' +
+				'# header'
 			);
 		} );
 
 		it( 'should process headers placed next to each other #2', () => {
-			test(
+			testDataProcessor(
 				'# header\n' +
 				'## header\n' +
 				'### header',
 
-				'<h1>header</h1><h2>header</h2><h3>header</h3>'
+				'<h1>header</h1><h2>header</h2><h3>header</h3>',
+
+				'# header\n' +
+				'\n' +
+				'## header\n' +
+				'\n' +
+				'### header'
 			);
 		} );
 
 		it( 'should process headers followed by a paragraph', () => {
-			test(
+			testDataProcessor(
 				'# header\n\n' +
 				'paragraph',
 

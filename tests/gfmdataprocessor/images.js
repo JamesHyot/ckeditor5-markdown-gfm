@@ -3,12 +3,12 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-import { testDataProcessor as test } from '../../tests/_utils/utils';
+import { testDataProcessor } from '../_utils/utils';
 
 describe( 'GFMDataProcessor', () => {
 	describe( 'images', () => {
 		it( 'should process images', () => {
-			test(
+			testDataProcessor(
 				'![alt text](http://example.com/image.png "title text")',
 
 				// GitHub is rendering as:
@@ -20,22 +20,22 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process images without title', () => {
-			test(
+			testDataProcessor(
 				'![alt text](http://example.com/image.png)',
 				'<p><img alt="alt text" src="http://example.com/image.png"></img></p>'
 			);
 		} );
 
 		it( 'should process images without alt text', () => {
-			test(
+			testDataProcessor(
 				'![](http://example.com/image.png "title text")',
 				'<p><img alt="" src="http://example.com/image.png" title="title text"></img></p>'
 			);
 		} );
 
 		it( 'should process referenced images', () => {
-			test(
-				'![alt text][logo]\n' +
+			testDataProcessor(
+				'![alt text][logo]\n\n' +
 				'[logo]: http://example.com/image.png "title text"',
 
 				'<p><img alt="alt text" src="http://example.com/image.png" title="title text"></img></p>',
@@ -46,8 +46,8 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process referenced images without title', () => {
-			test(
-				'![alt text][logo]\n' +
+			testDataProcessor(
+				'![alt text][logo]\n\n' +
 				'[logo]: http://example.com/image.png',
 
 				'<p><img alt="alt text" src="http://example.com/image.png"></img></p>',
@@ -58,8 +58,8 @@ describe( 'GFMDataProcessor', () => {
 		} );
 
 		it( 'should process referenced images without alt text', () => {
-			test(
-				'![][logo]\n' +
+			testDataProcessor(
+				'![][logo]\n\n' +
 				'[logo]: http://example.com/image.png "title text"',
 
 				'<p><img alt="" src="http://example.com/image.png" title="title text"></img></p>',
